@@ -1,6 +1,7 @@
 package com.dsa.learning.arrays.striver.practice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,9 +49,40 @@ public class ThreeSum {
         return set.stream().toList();
     }
 
-        public static void main (String[]args){
-            int[] arr = {-1, 2, -1, -1, 2, -1};
-           // System.out.println(threeSum(arr));
-            System.out.println(threeSumOptimized(arr));
+    private static List<List<Integer>> threeSumBestApproach(int[] arr, int n) {
+        List<Integer> list = new ArrayList<>();
+        List<List<Integer> > list1 = new ArrayList<>();
+        Arrays.sort(arr);
+        for (int i = 0; i < arr.length; i++) {
+            if (i > 0 && arr[i] == arr[i - 1]) continue;
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
+                int sum = arr[i] + arr[j] + arr[k];
+                if (sum < 0) {
+                    j++;
+                } else if (sum > 0) {
+                    k--;
+                } else {
+                    list.add(arr[i]);
+                    list.add(arr[j]);
+                    list.add(arr[k]);
+                    list1.add(list);
+                    j++;
+                    k--;
+                    while (j < k && arr[j] == arr[j - 1]) j++;
+                    while (j < k && arr[k] == arr[k + 1]) k--;
+                }
+            }
+
         }
+        return list1;
     }
+
+    public static void main(String[] args) {
+        int[] arr = {-1, 2, -1, -1, 2, -1};
+        // System.out.println(threeSum(arr));
+        System.out.println(threeSumOptimized(arr));
+        System.out.println(threeSumBestApproach(arr, arr.length));
+    }
+}
