@@ -49,7 +49,7 @@ public class DoublyLinkedListDemo {
     // write a program  to reverse the doubly linked list.
     private static DoublyLinkedListDemo reverse(DoublyLinkedListDemo head) {
         if (head == null)
-            return null;
+             return null;
         DoublyLinkedListDemo curr = head;
         DoublyLinkedListDemo prev = null;
         while (curr != null) {
