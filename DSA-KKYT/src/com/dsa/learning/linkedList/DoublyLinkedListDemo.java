@@ -3,6 +3,7 @@ package com.dsa.learning.linkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+
 import lombok.Builder;
 
 public class DoublyLinkedListDemo {
@@ -49,7 +50,7 @@ public class DoublyLinkedListDemo {
     // write a program  to reverse the doubly linked list.
     private static DoublyLinkedListDemo reverse(DoublyLinkedListDemo head) {
         if (head == null)
-             return null;
+            return null;
         DoublyLinkedListDemo curr = head;
         DoublyLinkedListDemo prev = null;
         while (curr != null) {
@@ -101,30 +102,72 @@ public class DoublyLinkedListDemo {
         return head;
     }
 
+    private static void findAllPairsWithGivenSumBetter(DoublyLinkedListDemo head, int target) {
+        DoublyLinkedListDemo left = head;
+        DoublyLinkedListDemo right = getTailNode(head);
+        while (left.data < right.data) {
+            if (left.data + right.data == target) {
+                System.out.println(left.data + "," + right.data);
+                left = left.next;
+                right = right.prev;
+            } else if (left.data + right.data > target) {
+                right = right.prev;
+            } else {
+                left = left.next;
+            }
+        }
+    }
+
+    private static DoublyLinkedListDemo getTailNode(DoublyLinkedListDemo head) {
+        DoublyLinkedListDemo temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    private static DoublyLinkedListDemo removeDuplicate(DoublyLinkedListDemo head) {
+        DoublyLinkedListDemo temp = head;
+        DoublyLinkedListDemo next = temp.next;
+        while (temp != null) {
+            if (next != null && temp.data == next.data) {
+                next = next.next;
+            } else {
+                temp.next = next;
+                if (next != null) {
+                    next.prev = temp;
+                    next = temp.next;
+                }
+                temp = temp.next;
+            }
+        }
+        return head;
+    }
+
 
     public static void main(String[] args) {
         DoublyLinkedListDemo head = new DoublyLinkedListDemo(1);
         DoublyLinkedListDemo node1 = new DoublyLinkedListDemo(1);
         DoublyLinkedListDemo node2 = new DoublyLinkedListDemo(1);
-        DoublyLinkedListDemo node3 = new DoublyLinkedListDemo(2);
-        DoublyLinkedListDemo node4 = new DoublyLinkedListDemo(3);
-        DoublyLinkedListDemo node5 = new DoublyLinkedListDemo(3);
+       // DoublyLinkedListDemo node3 = new DoublyLinkedListDemo(1);
+        //DoublyLinkedListDemo node4 = new DoublyLinkedListDemo(3);
+       // DoublyLinkedListDemo node5 = new DoublyLinkedListDemo(4);
         //DoublyLinkedListDemo node6 = new DoublyLinkedListDemo(4);
 
         head.next = node1;
         node1.prev = head;
         node1.next = node2;
         node2.prev = node1;
-        node2.next = node3;
-        node3.prev = node2;
-        node3.next = node4;
-        node4.prev = node3;
-        node4.next = node5;
-        node5.prev = node4;
+        //node2.next = node3;
+       // node3.prev = node2;
+        //node3.next = node4;
+        //node4.prev = node3;
+       // node4.next = node5;
+        //node5.prev = node4;
         // node5.next = node6;
         // node6.prev = node5;
 
-        print(head);
+        // print(head);
         System.out.println("______________________________________________");
         //DoublyLinkedListDemo doublyLinkedListDemo = insertAtFirst(24, head);
         //DoublyLinkedListDemo doublyLinkedListDemo = insertAtTheEnd(28, head);
@@ -133,6 +176,8 @@ public class DoublyLinkedListDemo {
         //DoublyLinkedListDemo doublyLinkedListDemo = deleteFirstNode(node);
         // DoublyLinkedListDemo doublyLinkedListDemo = deleteLastNode(head);
         // print(doublyLinkedListDemo);
-        print(deleteDuplicateOccurrences(head));
+        //print(deleteDuplicateOccurrences(head));
+        //findAllPairsWithGivenSumBetter(head, 8);
+        print(removeDuplicate(head));
     }
 }

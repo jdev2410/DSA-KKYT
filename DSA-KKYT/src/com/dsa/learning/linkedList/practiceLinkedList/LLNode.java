@@ -3,7 +3,9 @@ package com.dsa.learning.linkedList.practiceLinkedList;
 import com.dsa.learning.linkedList.SinglyLinkedListRoughPractice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 class Node {
@@ -338,12 +340,219 @@ public class LLNode {
                 tempReverseHead.data = 0;
                 carry = 1;
             }
-            tempReverseHead=tempReverseHead.next;
+            tempReverseHead = tempReverseHead.next;
         }
-        if(carry==1){
-          return new Node(1,reverse(reverseHead));
+        if (carry == 1) {
+            return new Node(1, reverse(reverseHead));
         }
-       return reverse(reverseHead);
+        return reverse(reverseHead);
+    }
+
+    private static Node addOneOptimize(Node head) {
+        Node temp = head;
+        int carry = 1;
+        carry = addOneHelper(temp);
+        if (carry == 1) {
+            return new Node(1, head);
+        }
+        return head;
+    }
+
+    private static int addOneHelper(Node temp) {
+        if (temp == null)
+            return 1;
+        int carry = addOneHelper(temp.next);
+        temp.data = temp.data + carry;
+        if (temp.data < 10)
+            return 0;
+        temp.data = 0;
+        return 1;
+    }
+
+    private static Node findIntersection(Node head1, Node head2) {
+        Node temp1 = head1;
+        Node temp2 = head2;
+        Map<Node, Integer> map = new HashMap<>();
+        while (temp1 != null) {
+            map.put(temp1, 1);
+            temp1 = temp1.next;
+        }
+        while (temp2 != null) {
+            if (map.containsKey(temp2)) {
+                return temp2;
+            }
+            temp2 = temp2.next;
+        }
+        return null;
+    }
+
+//    private static Node findIntersectionBetter(Node head1, Node head2) {
+//        Node temp1 = head1;
+//        Node temp2 = head2;
+//        int count1 = 0;
+//        int count2 = 0;
+//        while (temp1 != null) {
+//            count1++;
+//            temp1 = temp1.next;
+//        }
+//        while (temp2 != null) {
+//            count2++;
+//            temp2 = temp2.next;
+//        }
+//        int diff = 0;
+//        temp1 = head1;
+//        temp2 = head2;
+//        if (count1 > count2) {
+//            diff = count1 - count2;
+//            Node newNode = getShiftedNode(temp1, diff);
+//            while (newNode != null) {
+//                if (newNode.data == temp2.data)
+//                    return temp2;
+//                temp2 = temp2.next;
+//                newNode = newNode.next;
+//            }
+//        } else if (count2 > count1) {
+//            diff = count2 - count1;
+//            Node newNode = getShiftedNode(temp2, diff);
+//            while (newNode != null) {
+//                if (newNode.data == temp1.data)
+//                    return temp1;
+//                temp1 = temp1.next;
+//                newNode = newNode.next;
+//            }
+//        }
+//        while (temp1 != null) {
+//            if (temp1.data == temp2.data)
+//                return temp1;
+//            temp1 = temp1.next;
+//            temp2 = temp2.next;
+//        }
+//        return null;
+//    }
+//
+//    private static Node getShiftedNode(Node head, int diff) {
+//        Node temp = head;
+//        for (int i = 0; i < diff; i++) {
+//            temp = temp.next;
+//        }
+//        return temp;
+//    }
+
+    private static int findMiddle(Node head) {
+        Node temp = head;
+        Node slow = temp;
+        Node fast = temp;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow.data;
+    }
+
+    private static Node deleteMiddleElement(Node head) {
+        Node temp = head;
+        Node slow = temp;
+        Node fast = temp;
+        Node prev = new Node(-1, head);
+        Node tempPrev = prev;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            tempPrev = slow;
+            slow = slow.next;
+        }
+        tempPrev.next = slow.next;
+        return prev.next;
+    }
+
+    private static void findAllPairsWithGivenSum(Node head, int target) {
+        Node temp1 = head;
+        Node temp2 = head;
+        while (temp1 != null) {
+            temp2 = temp1.next;
+            while (temp2 != null) {
+                if (temp1.data + temp2.data == target)
+                    System.out.println(temp1.data + "," + temp2.data);
+                else if (temp1.data + temp2.data > target) {
+                    break;
+                }
+                temp2 = temp2.next;
+            }
+            temp1 = temp1.next;
+        }
+    }
+
+    private static Node reverseNodeInKGroup(Node head, int k) {
+        if (head == null || head.next == null)
+            return head;
+        Node temp = head;
+        Node preserv = null;
+        while (temp != null) {
+            Node kthNode = getKthNode(temp, k);
+            if (kthNode == null) {
+                if (preserv != null)
+                    preserv.next = null;
+                break;
+            }
+
+            Node nextNode = kthNode.next;
+            kthNode.next = null;
+            Node reverse = reverse(temp);
+            if (temp == head) {
+                head = kthNode;
+            } else {
+                preserv.next = kthNode;
+            }
+            preserv = temp;
+            temp = nextNode;
+        }
+
+        return head;
+    }
+
+    private static Node getKthNode(Node temp, int k) {
+        k -= 1;
+        while (temp != null && k > 0) {
+            k--;
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    private static Node rotateByKTimes(Node head, int k) {
+        Node tail = head;
+        int length = 1;
+        while (tail.next != null) {
+            length++;
+            tail = tail.next;
+        }
+        if (k % length == 0)
+            return head;
+        k = k % length;
+        tail.next = head;
+        Node kthNode = getKthNode(head, length - k);
+        head = kthNode.next;
+        kthNode.next = null;
+        return head;
+    }
+
+    private static Node mergeTwoSortedList(Node head1, Node head2) {
+        List<Integer> list = addTwoSortedLL(head1, head2);
+        List<Integer> sortedList = list.stream().sorted().toList();
+        int[] array = sortedList.stream().mapToInt(Integer::intValue).toArray();
+       return convertArrayIntoLinkedList(array);
+    }
+
+    private static List<Integer> addTwoSortedLL(Node head1, Node head2) {
+        List<Integer> list = new ArrayList<>();
+        while (head1 != null) {
+            list.add(head1.data);
+            head1 = head1.next;
+        }
+        while (head2 != null) {
+            list.add(head2.data);
+            head2 = head2.next;
+        }
+        return list;
     }
 
     public static void main(String[] args) {
@@ -375,9 +584,36 @@ public class LLNode {
         //print(deleteKthNodeFromTheEndBetter(deleteKthElement, 2));
         //System.out.println(isPalindrome(palindromeNode));
         //System.out.println(isPalindromeBetter(palindromeNode));
-        int[] addOne = {9, 9, 9};
-        Node addOneNode = convertArrayIntoLinkedList(addOne);
-        print(addOne(addOneNode));
+        int[] addOne = {1, 6, 9};
+        //Node addOneNode = convertArrayIntoLinkedList(addOne);
+        //print(addOne(addOneNode));
+        // print(addOneOptimize(addOneNode));
+        int[] intersection1 = {1, 2, 9};
+        int[] intersection2 = {1, 2, 3, 12, 5, 6, 7};
+        Node intersectionLL1 = convertArrayIntoLinkedList(intersection1);
+        Node intersectionLL2 = convertArrayIntoLinkedList(intersection2);
+        Node temp1 = intersectionLL1;
+        Node temp2 = intersectionLL2;
+        while (temp1 != null) {
+            temp2 = temp2.next;
+            if (temp1.next == null) {
+                temp1.next = temp2;
+                break;
+            }
+            temp1 = temp1.next;
+        }
+        //print(findIntersection(intersectionLL1, intersectionLL2));
+        //print(findIntersectionBetter(intersectionLL1, intersectionLL2));
+        int[] arr11 = {1, 3, 4};
+        int[] arr13 = {1, 2, 4, 5};
+        Node node11 = convertArrayIntoLinkedList(arr11);
+        Node node13 = convertArrayIntoLinkedList(arr13);
+        //System.out.println(findMiddle(node11));
+        //print(deleteMiddleElement(node11));
+        //findAllPairsWithGivenSum(node11, 8);
+        //print(reverseNodeInKGroup(node11, 3));
+        //print(rotateByKTimes(node11, 2));
+        print(mergeTwoSortedList(node11,node13 ));
     }
 
 }
