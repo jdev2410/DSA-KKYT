@@ -539,7 +539,7 @@ public class LLNode {
         List<Integer> list = addTwoSortedLL(head1, head2);
         List<Integer> sortedList = list.stream().sorted().toList();
         int[] array = sortedList.stream().mapToInt(Integer::intValue).toArray();
-       return convertArrayIntoLinkedList(array);
+        return convertArrayIntoLinkedList(array);
     }
 
     private static List<Integer> addTwoSortedLL(Node head1, Node head2) {
@@ -553,6 +553,29 @@ public class LLNode {
             head2 = head2.next;
         }
         return list;
+    }
+
+    private static Node mergeTwoSortedListOptimized(Node head1, Node head2) {
+        Node temp1 = head1;
+        Node temp2 = head2;
+        Node dummy = new Node(-1, null);
+        Node temp = dummy;
+        while (temp1 != null && temp2 != null) {
+            if (temp1.data < temp2.data) {
+                temp.next = temp1;
+                temp = temp1;
+                temp1 = temp1.next;
+            } else {
+                temp.next = temp2;
+                temp = temp2;
+                temp2 = temp2.next;
+            }
+            if (temp1 != null)
+                temp.next = temp1;
+            else
+                temp.next=temp2;
+        }
+        return dummy.next;
     }
 
     public static void main(String[] args) {
@@ -605,7 +628,7 @@ public class LLNode {
         //print(findIntersection(intersectionLL1, intersectionLL2));
         //print(findIntersectionBetter(intersectionLL1, intersectionLL2));
         int[] arr11 = {1, 3, 4};
-        int[] arr13 = {1, 2, 4, 5};
+        int[] arr13 = {1, 2, 4, 5,7};
         Node node11 = convertArrayIntoLinkedList(arr11);
         Node node13 = convertArrayIntoLinkedList(arr13);
         //System.out.println(findMiddle(node11));
@@ -613,7 +636,8 @@ public class LLNode {
         //findAllPairsWithGivenSum(node11, 8);
         //print(reverseNodeInKGroup(node11, 3));
         //print(rotateByKTimes(node11, 2));
-        print(mergeTwoSortedList(node11,node13 ));
+        //print(mergeTwoSortedList(node11, node13));
+        print(mergeTwoSortedListOptimized(node11, node13));
     }
 
 }
