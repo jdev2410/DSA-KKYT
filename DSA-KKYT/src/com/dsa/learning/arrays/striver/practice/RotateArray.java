@@ -43,12 +43,13 @@ public class RotateArray {
         arr[0] = temp;
         System.out.println(Arrays.toString(arr));
     }
+
     private static void rotateLefByDElement(int d) {
         int[] arr = {1, 2, 3, 4};
         d = d % arr.length;
-        reverse(arr, 0,d-1);
-        reverse(arr, d, arr.length-1);
-        reverse(arr, 0,arr.length-1);
+        reverse(arr, 0, d - 1);
+        reverse(arr, d, arr.length - 1);
+        reverse(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
         // TIME COMPLEXITY= O(2N)
         // Extra Space= O(1) Because we are not using any other array, we are manupulating arr only.
@@ -58,9 +59,9 @@ public class RotateArray {
         int[] arr = {1, 2, 3, 4};
         d = d % arr.length;
         d = arr.length - d;// This line will be responsible for rotating right
-        reverse(arr, 0,d-1);
-        reverse(arr, d, arr.length-1);
-        reverse(arr, 0,arr.length-1);
+        reverse(arr, 0, d - 1);
+        reverse(arr, d, arr.length - 1);
+        reverse(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
         // TIME COMPLEXITY= O(2N)
         // Extra Space= O(1) Because we are not using any other array, we are manupulating arr only.
@@ -77,11 +78,12 @@ public class RotateArray {
     }
 
 
+
     public static void main(String[] args) {
         //rotateLeftByOneElement();
         //rotateLeftByDElement(4);// Where 2 is how many left rotate you want.
         //rotateRightByOneElement();
-       // rotateLefByDElement(2);
+        // rotateLefByDElement(2);
         //rotateRightByDElement(2);
     }
 }
